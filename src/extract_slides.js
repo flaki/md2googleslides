@@ -334,11 +334,35 @@ inlineTokenRules['softbreak'] = function(token, env) {
 };
 
 inlineTokenRules['blockquote_open'] = function(token, env) {
+    /*
     startStyle({italic: true}, env); // TODO - More interesting styling for block quotes
+    */
+
+    // Since the notes can contain unparsed markdown, create a new environment
+    // to process it so we don't inadvertently lose state. Just carry
+    // forward the notes from the current slide to append to
+    var subEnv = newEnv(inlineTokenRules, env.css);
+    if (env.currentSlide.notes) {
+        subEnv.text = env.currentSlide.notes;
+    } else {
+        startTextBlock(subEnv);
+    }
+
+    // Override current env's text so we add content onto the notes instead
+    env.currentSlide.preBlockquoteText = env.text;
+    env.text = subEnv.text;
+    // Let the parser do the rest of the work, we'll stitch it up once we
+    // get back from the blockquote
 };
 
 inlineTokenRules['blockquote_close'] = function(token, env) {
+    /*
     endStyle(env);
+    */
+
+    // Wrap up slide notes and restore original text env
+    env.currentSlide.notes = env.text;
+    env.text = env.currentSlide.preBlockquoteText
 };
 
 inlineTokenRules['emoji'] = function(token, env) {
