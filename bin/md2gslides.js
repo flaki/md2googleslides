@@ -30,8 +30,8 @@ const readline = require('readline');
 const SCOPES = [
     'https://www.googleapis.com/auth/presentations'
 ];
-const USER_HOME = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
-const STORED_CREDENTIALS_PATH = path.join(USER_HOME, '.credentials', 'md2gslides.json');
+//const USER_HOME = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
+const STORED_CREDENTIALS_PATH = path.join(__dirname, '../data', 'md2gslides.json');
 
 function parseArguments() {
     var parser = new ArgumentParser({
