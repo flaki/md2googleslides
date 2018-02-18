@@ -397,7 +397,11 @@ fullTokenRules['heading_close'] = function(token, env) {
     if(token.tag == 'h1') {
         env.currentSlide.title = env.text;
     } else if (token.tag == 'h2') {
-        env.currentSlide.subtitle = env.text;
+        if (env.currentSlide.title === null) {
+            env.currentSlide.title = env.text;
+        } else {
+            env.currentSlide.subtitle = env.text;
+        }
     } else {
         debug(`Ignoring header element ${token.tag}`);
     }
